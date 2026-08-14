@@ -1,0 +1,218 @@
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: 80px;
+  border-bottom: 1px solid transparent;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.solid {
+  background: rgba(20, 17, 14, 0.88);
+  backdrop-filter: blur(16px);
+  border-bottom-color: var(--hairline);
+}
+
+.mark {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream);
+  white-space: nowrap;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 3.5vw, 3rem);
+}
+
+.links {
+  display: flex;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.link {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color var(--dur) var(--ease);
+}
+
+/* Тонкая линия растёт слева направо под курсором — тот же язык,
+   что у вторичной ссылки (Quiet), только без постоянной рамки. */
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -4px;
+  height: 1px;
+  background: var(--champagne);
+  transition: right var(--dur) var(--ease);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--cream);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  right: 0;
+}
+
+/* Текущий раздел (scroll-spy): подчёркивание уже на месте, без наведения —
+   деталь, которую замечают, только когда её нет. */
+.linkActive {
+  color: var(--champagne);
+}
+
+.linkActive::after {
+  right: 0;
+  background: var(--champagne);
+}
+
+/* Бургер: два штриха вместо трёх (спокойнее, в духе тонких hairline
+   линий сайта) морфятся в крестик поворотом, без сторонней иконки. */
+.burger {
+  display: none;
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+}
+
+.burgerLine {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 1px;
+  background: var(--cream);
+  transition: transform var(--dur) var(--ease), top var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+
+.burgerLine:first-child {
+  top: 13px;
+}
+
+.burgerLine:last-child {
+  top: 20px;
+}
+
+.burgerLine[data-open='true']:first-child {
+  top: 16px;
+  transform: rotate(45deg);
+}
+
+.burgerLine[data-open='true']:last-child {
+  top: 16px;
+  transform: rotate(-45deg);
+}
+
+/* Затемнение под панелью — тот же приём, что и стекло самого nav,
+   только неинтерактивное, пока меню закрыто (клик проходит насквозь). */
+.scrim {
+  position: fixed;
+  inset: 68px 0 0 0;
+  z-index: 55;
+  background: rgba(20, 17, 14, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.scrim[data-open='true'] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobilePanel {
+  position: fixed;
+  top: 68px;
+  left: 0;
+  right: 0;
+  z-index: 56;
+  display: flex;
+  flex-direction: column;
+  background: rgba(20, 17, 14, 0.94);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--hairline);
+  padding: 0.5rem clamp(1.5rem, 6vw, 7rem) 1.25rem;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.mobilePanel[data-open='true'] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.mobileLink {
+  padding-block: 1.1rem;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 5vw, 1.65rem);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: color var(--dur) var(--ease), opacity 420ms var(--ease), transform 420ms var(--ease);
+  transition-delay: calc(60ms + var(--i, 0) * 60ms);
+}
+
+.mobilePanel[data-open='true'] .mobileLink {
+  opacity: 1;
+  transform: none;
+}
+
+.mobileLink:last-child {
+  border-bottom: 0;
+}
+
+.mobileLink:hover,
+.mobileLink:focus-visible {
+  color: var(--cream);
+}
+
+.mobileLink.linkActive {
+  color: var(--champagne);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burgerLine,
+  .scrim,
+  .mobilePanel,
+  .mobileLink {
+    transition: none;
+  }
+  .mobileLink {
+    transition-delay: 0ms;
+  }
+}
+
+@media (max-width: 680px) {
+  .nav {
+    height: 68px;
+  }
+  .links {
+    display: none;
+  }
+  .burger {
+    display: block;
+  }
+}

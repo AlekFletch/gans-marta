@@ -1,0 +1,29 @@
+/* Палитра «Эспрессо и шампань».
+   Контраст посчитан на --ink, значения в комментариях. Не меняйте на глаз. */
+:root {
+  --ink: #14110e;
+  --surface: #1e1a16;
+  --surface-2: #272119;
+
+  --champagne: #c8b08a; /* 8.99:1 — можно красить текст: цены, ссылки, надзаголовки */
+  --cream: #ede6da; /* 15.17:1 — основной текст */
+  --muted: #9a8f7d; /* 5.91:1 — вторичный текст */
+  --dim: #7a6e5c; /* 3.77:1 — ТОЛЬКО линии и декор, не текст */
+
+  --hairline: rgba(237, 230, 218, 0.12);
+  --hairline-strong: rgba(237, 230, 218, 0.22);
+
+  --font-display: 'Tenor Sans', 'Optima', 'Segoe UI', sans-serif;
+  --font-body: 'Literata', Georgia, 'Times New Roman', serif;
+
+  /* Ровно столько скругления, чтобы ушла резкость. Не «таблетки». */
+  --radius: 3px;
+
+  /* Спокойствие держится на воздухе, а не на линиях. */
+  --gap-section: clamp(6rem, 13vw, 12rem);
+  --pad-x: clamp(1.5rem, 6vw, 7rem);
+  --measure: 36ch;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 240ms;
+}

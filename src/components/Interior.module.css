@@ -1,0 +1,97 @@
+.section {
+  padding-block: var(--gap-section);
+  border-top: 1px solid var(--hairline);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+  margin-top: 1.25rem;
+  color: var(--cream);
+}
+
+.lead {
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.note {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hairline);
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--champagne);
+}
+
+/* Крупный кадр слева, два меньших справа — но колонки равны по ширине,
+   иерархию задаёт только высота снимков. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+.column {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-content: start;
+}
+
+/* Только размер, положение в сетке и появление масштабом. Фон, дрейф
+   и наклон карточки — внутри TiltCard, вложенной в этот <figure>. */
+.shot {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 640ms var(--ease), transform 640ms var(--ease);
+}
+
+.grid[data-visible='true'] .shot {
+  opacity: 1;
+  transform: none;
+}
+
+.grid > .shot {
+  transition-delay: 80ms;
+}
+
+.column > .shot:nth-child(1) {
+  transition-delay: 240ms;
+}
+
+.column > .shot:nth-child(2) {
+  transition-delay: 380ms;
+}
+
+.large {
+  aspect-ratio: 3 / 4;
+}
+
+.small {
+  aspect-ratio: 3 / 2;
+}
+
+@media (max-width: 860px) {
+  .head,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .title {
+    margin-top: 1rem;
+  }
+  .large,
+  .small {
+    aspect-ratio: 3 / 2;
+  }
+}

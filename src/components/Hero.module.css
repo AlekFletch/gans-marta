@@ -1,0 +1,146 @@
+/* @property делает --mx/--my анимируемыми: браузер плавно интерполирует
+   их через transition, поэтому пятно догоняет курсор с запаздыванием,
+   а не прыгает вслед за ним мгновенно. Без поддержки — мгновенное
+   позиционирование, ничего не ломается. */
+@property --mx {
+  syntax: '<length-percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+@property --my {
+  syntax: '<length-percentage>';
+  inherits: true;
+  initial-value: 20%;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(2.5rem, 7vw, 6rem);
+  min-height: 100svh;
+  padding-block: 9rem 5rem;
+}
+
+/* Тёплое пятно ходит за курсором только здесь — нигде больше на сайте
+   акцент не становится оранжевым. Намеренно НЕ radial-gradient: у
+   градиента с широким плавным спадом на большой площади и низкой
+   альфой видны кольца-бандинг (полосатость вместо гладкого пятна,
+   особенно заметно на видео/скриншотах). Вместо этого — сплошной
+   маленький круг, размытый filter: blur — размытие физически
+   перемешивает пиксели и полосам взяться неоткуда. */
+.glow {
+  position: absolute;
+  left: var(--mx, 50%);
+  top: var(--my, 20%);
+  z-index: -1;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: rgba(255, 126, 51, 0.55);
+  filter: blur(75px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: --mx 450ms var(--ease), --my 450ms var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow {
+    display: none;
+  }
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.5rem, 2.5vw, 2.25rem);
+}
+
+/* Имя — фраза из трёх слов, не аббревиатура: трекинг и кегль
+   уменьшены против прежней версии, иначе строка не помещается. */
+.word {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.6vw, 3.75rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  /* компенсация трекинга справа, чтобы блок оптически стоял ровно */
+  margin-right: -0.04em;
+  color: var(--cream);
+}
+
+.tagline {
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.7vw, 1.4rem);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--champagne);
+}
+
+.lead {
+  max-width: 38ch;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.rule {
+  width: 4rem;
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--dim);
+}
+
+/* Только размер и вход. Фон, дрейф и наклон — внутри TiltCard,
+   этот класс лишь задаёт габариты обёртки и появление при загрузке.
+   16:9 — широкая полоса, а не портрет: правая колонка теперь короче
+   текстовой, .hero центрирует их по высоте общей строки. */
+.plate {
+  aspect-ratio: 16 / 9;
+  opacity: 0;
+  animation: fade 1000ms var(--ease) 260ms forwards;
+}
+
+/* Вход текстового блока слева — тот же разовый fade, что у .plate. */
+.reveal > * {
+  opacity: 0;
+  animation: fade 1000ms var(--ease) forwards;
+}
+
+.reveal > *:nth-child(1) { animation-delay: 100ms; }
+.reveal > *:nth-child(2) { animation-delay: 220ms; }
+.reveal > *:nth-child(3) { animation-delay: 320ms; }
+.reveal > *:nth-child(4) { animation-delay: 400ms; }
+.reveal > *:nth-child(5) { animation-delay: 480ms; }
+.reveal > *:nth-child(6) { animation-delay: 560ms; }
+
+@keyframes fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal > *,
+  .plate {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding-block: 7.5rem 3.5rem;
+  }
+  .plate {
+    order: -1;
+    aspect-ratio: 16 / 9;
+  }
+}

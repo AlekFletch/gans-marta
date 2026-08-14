@@ -1,0 +1,208 @@
+.section {
+  padding-block: var(--gap-section);
+  border-top: 1px solid var(--hairline);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: clamp(1.5rem, 6vw, 5rem);
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+  margin-top: 1.25rem;
+  color: var(--cream);
+}
+
+.stamp {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 5vw, 5rem);
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+  border-top: 1px solid var(--hairline);
+}
+
+.group + .group {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.groupHead {
+  position: sticky;
+  top: 116px;
+  align-self: start;
+  padding-bottom: 2rem;
+}
+
+.groupTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  line-height: 1.25;
+  letter-spacing: 0.06em;
+  color: var(--cream);
+}
+
+.groupHint {
+  max-width: 28ch;
+  margin-top: 0.75rem;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* Строка меню: где есть состав блюда — раскрывающийся дисклоужер
+   со стрелкой, где нет — статичная строка. Наведение красит только
+   цену и стрелку, без заливки фона. */
+.item {
+  border-bottom: 1px solid var(--hairline);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 520ms var(--ease), transform 520ms var(--ease);
+  /* 90ms общей паузы перед стартом каскада — тот же ритм, что у reveal-up. */
+  transition-delay: calc(90ms + var(--i, 0) * 45ms);
+}
+
+.group[data-visible='true'] .item {
+  opacity: 1;
+  transform: none;
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: 0.4rem 0.75rem;
+  width: 100%;
+  padding: clamp(1.1rem, 2vw, 1.6rem) 0;
+  text-align: left;
+}
+
+div.row {
+  cursor: default;
+}
+
+button.row {
+  cursor: pointer;
+}
+
+.itemName {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--cream);
+}
+
+.itemPrice {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: color var(--dur) var(--ease);
+}
+
+.row:hover .itemPrice,
+.row:focus-visible .itemPrice {
+  color: var(--champagne);
+}
+
+.chevron {
+  color: var(--muted);
+  transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.chevron[data-open='true'] {
+  transform: rotate(180deg);
+}
+
+.row:hover .chevron,
+.row:focus-visible .chevron {
+  color: var(--champagne);
+}
+
+/* Раскрытие состава через анимацию grid-template-rows: плавно
+   без JS-измерения высоты, ужимается ровно до нуля при закрытии. */
+/* Мягкая кривая (expo-out) вместо стандартного --ease страницы —
+   раскрытие состава отдельно ощущается как более плавный жест,
+   а не быстрый щелчок. */
+.descPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 460ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.descPanel[data-open='true'] {
+  grid-template-rows: 1fr;
+}
+
+.descInner {
+  overflow: hidden;
+}
+
+.itemDesc {
+  max-width: 46ch;
+  padding-bottom: 1.1rem;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 320ms ease-out, transform 320ms ease-out;
+}
+
+.descPanel[data-open='true'] .itemDesc {
+  opacity: 1;
+  transform: none;
+  transition-delay: 140ms;
+}
+
+.row[aria-expanded='true'] .itemName {
+  color: var(--champagne);
+  transition: color 320ms var(--ease);
+}
+
+.mark {
+  display: inline-block;
+  margin-left: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  vertical-align: 0.15em;
+}
+
+@media (max-width: 860px) {
+  .head,
+  .group {
+    grid-template-columns: 1fr;
+  }
+  .head {
+    align-items: start;
+  }
+  .groupHead {
+    position: static;
+    padding-bottom: 1.5rem;
+  }
+}

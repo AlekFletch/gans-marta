@@ -1,0 +1,141 @@
+.section {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--gap-section);
+  border-top: 1px solid var(--hairline);
+  text-align: center;
+}
+
+/* Продолжает затухание карты по ту сторону границы секций — шов между
+   картой и приглашением читается одним градиентом, а не обрывом. */
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 22vh;
+  background: linear-gradient(to bottom, rgba(20, 17, 14, 0.5), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Огромная монограмма-призрак фоном — тот же приём, что и в TiltCard
+   (прозрачная заливка, тонкая обводка), но здесь это полное имя, а не
+   инициалы, и оно закрывает секцию снизу, а не прячется в углу карточки. */
+.mark {
+  position: absolute;
+  left: 50%;
+  bottom: -0.14em;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 15vw, 11rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--hairline-strong);
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+/* Кегль чуть ниже потолка hero (3.75rem) — эхо главного заголовка,
+   а не спор с ним за внимание. */
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5.5vw, 3.75rem);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--cream);
+  max-width: 16ch;
+}
+
+/* Бегущая строка реальных фактов: тонкая полоса на hairline-рамке,
+   без наклона и теней — та же сдержанность, что и во всей вёрстке. */
+.ticker {
+  width: 100%;
+  max-width: 640px;
+  overflow: hidden;
+  border-block: 1px solid var(--hairline);
+  padding-block: 0.9rem;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+.tickerTrack {
+  display: flex;
+  width: max-content;
+  animation: scroll 22s linear infinite;
+}
+
+@keyframes scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.tickerItem {
+  flex: none;
+  padding-inline: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.tickerItem::after {
+  content: '·';
+  margin-left: 1.5rem;
+  color: var(--dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tickerTrack {
+    animation: none;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Магнитная обёртка: кнопка чуть тянется к курсору в пределах ~10px
+   и плавно возвращается — экспоненциальное затухание, без пружинного
+   перехлёста: тот же почерк, что у раскрытия состава в меню, а не
+   мультяшный bounce, чужой спокойному языку сайта. */
+.magnet {
+  display: inline-flex;
+  transform: translate(var(--pull-x, 0px), var(--pull-y, 0px));
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magnet {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .heading {
+    font-size: clamp(2rem, 9vw, 2.75rem);
+  }
+  .mark {
+    font-size: 22vw;
+  }
+}

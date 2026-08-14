@@ -1,0 +1,168 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+ul,
+ol,
+dl {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 1px solid var(--champagne);
+  outline-offset: 4px;
+}
+
+::selection {
+  background: var(--champagne);
+  color: var(--ink);
+}
+
+/* Тонкий брендированный скроллбар вместо системного синего/серого —
+   мелочь, которую замечают в первую секунду. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-2) var(--ink);
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-2);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dim);
+}
+
+/* --- Утилиты типографики ---
+   Tenor Sans идёт одним начертанием, поэтому иерархия строится
+   кеглем и разрядкой, а не жирностью. */
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Общая горизонтальная рамка страницы. Секции сами не задают padding-inline. */
+.shell {
+  padding-inline: var(--pad-x);
+}
+
+/* Второй, более сдержанный вход: заголовки секций и панель карты
+   мягко проявляются при скролле — не копия hero-каскада, один короткий шаг.
+   Пауза в 140ms перед стартом — блок не бросается в кадр вслед за
+   скроллом, а будто ждёт своей очереди: это и читается как «премиум». */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 900ms var(--ease) 140ms, transform 900ms var(--ease) 140ms;
+}
+
+.reveal-up[data-visible='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
